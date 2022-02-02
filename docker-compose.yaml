@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  #keycloak   
+  keycloak:
+    image: jboss/keycloak:15.0.0
+    container_name: keycloak
+    ports:
+      - 8080:8080
+    volumes:
+      - ./infra/keycloak/realm-test.json:/tmp/realm-test.json  
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=postgres
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+      - KEYCLOAK_IMPORT=/tmp/realm-test.json
+    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    depends_on:
+      - postgres
+      
+  #postgres DB
+  postgres:
+    image: postgres:13.5-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d
+      
+  #movieapplication    
+  movieapplication:
+    image: nitinrai17/movieapplication
+    container_name: movieapplication
+    build: 
+        dockerfile: Dockerfile
+        context: ./MovieApplication
+    expose:
+     - 8880
+    ports:
+     - 8880:8880
+    environment:
+     - KEYCLOAK_URL=http://keycloak:8080/
+     - KEYCLOAK_REALM=test
+    depends_on:
+     - keycloak    
+    
+
+volumes:
+  postgres:

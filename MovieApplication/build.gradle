@@ -1,0 +1,62 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'maven-publish'
+	id 'com.jfrog.artifactory' version '4.26.3'
+}
+
+group = 'com.nitin.movie'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+        mavenCentral()   
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.auth0:jwks-rsa:0.15.0'
+	implementation 'com.nitin.oauth2.lib:OAuth2KeycloakLib:0.0.1-SNAPSHOT'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'nitin-gradle-dev-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true 
+        }
+		
+		defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+			publishPom = true
+            
+        }
+    }
+		
+    resolve {
+        repository {
+            repoKey = 'nitin-gradle-dev'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+        }
+    }
+}
