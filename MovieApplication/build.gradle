@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.auth0:jwks-rsa:0.15.0'
 	implementation 'com.nitin.oauth2.lib:OAuth2KeycloakLib:0.0.1-SNAPSHOT'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

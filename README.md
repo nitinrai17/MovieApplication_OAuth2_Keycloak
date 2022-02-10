@@ -60,4 +60,10 @@ Request Body contains:- <br/>
 <br/>
 <img src="images/call_movie_api1.gif">	
 <br/><br/>
-	
+
+### Swagger Documentation Movie Rest api
+you need to provide the token in the header for swagger documentation response in json.  
+<br/>
+<img src="images/swagger_api_docs.PNG">	
+<br/><br/>
+
