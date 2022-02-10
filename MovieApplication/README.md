@@ -46,3 +46,102 @@ you need to setup jfrog cloud artifactory and provide the credential in the grad
 	docker run --network oauth20_default -e KEYCLOAK_URL='http://keycloak:8080/' -p 8880:8880 nitinrai17/movieapplication 
 
 ```
+
+## Swagger Documentation 
+First you need to get valid token and pass in the header to see the swagger documentation in json.
+
+```
+localhost:8880/v3/api-docs/
+
+```
+
+Result will be 
+```
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8880/",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/movies": {
+            "get": {
+                "tags": [
+                    "movie-controller"
+                ],
+                "operationId": "getAllMovies",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/movies/{id}": {
+            "get": {
+                "tags": [
+                    "movie-controller"
+                ],
+                "operationId": "getMovieById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Movie"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Movie": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "actor": {
+                        "type": "string"
+                    },
+                    "year": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            }
+        }
+    }
+}
+```

@@ -49,7 +49,19 @@ services:
      - KEYCLOAK_URL=http://keycloak:8080/
      - KEYCLOAK_REALM=test
     depends_on:
-     - keycloak    
+     - keycloak
+        
+  #nginx
+  nginx:
+    image: nitinrai17/movienginx:latest
+    container_name: movienginx
+    build: 
+        context: ./nginx
+        dockerfile: Dockerfile
+    ports:
+     - 80:80
+    depends_on:
+     - movieapplication    
     
 
 volumes:

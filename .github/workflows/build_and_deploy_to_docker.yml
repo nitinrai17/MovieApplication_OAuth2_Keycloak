@@ -1,0 +1,56 @@
+name: CI build and deploy aws
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: CI build action
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Replacing the jfrog repo password 
+        run: |
+          echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
+          sed -i 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' MovieApplication/gradle.properties
+
+      - name: Build docker-compose stack
+        run: |
+          echo ---Building and starting up docker---
+          docker-compose -f docker-compose.yaml up -d --build
+          echo ---Containers up---
+      - name: Check running containers
+        run: docker ps
+     
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f docker-compose.yaml down
+        
+     #docker push to dockerhub
+  docker:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Replacing the jfrog repo password 
+        run: |
+          echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
+          sed -i 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' MovieApplication/gradle.properties
+          
+      - name: Docker username 
+        run: echo ${{ secrets.DOCKER_USERNAME }}
+      
+      - name: print Github run id  
+        run: echo ${GITHUB_RUN_ID}
+     
+      - name: Building Docker Image
+        run: docker build -t ${{ secrets.DOCKER_REPO }}:latest -t ${{ secrets.DOCKER_REPO }}:${GITHUB_RUN_ID} .
+
+      - name: Docker Hub Sign-in
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Publish Docker Image
+        run: docker push ${{ secrets.DOCKER_REPO }}:latest
+    
