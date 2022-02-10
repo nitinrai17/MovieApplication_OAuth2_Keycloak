@@ -14,19 +14,19 @@ jobs:
       - name: Replacing the jfrog repo password 
         run: |
           echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
-          sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' ./MovieApplication/gradle.propeeties
+          sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' MovieApplication/gradle.propeeties
 
       - name: Build docker-compose stack
         run: |
           echo ---Building and starting up docker---
-          docker-compose -f docker-compose.yml up -d --build
+          docker-compose -f docker-compose.yaml up -d --build
           echo ---Containers up---
       - name: Check running containers
         run: docker ps
      
       - name: Stop containers
         if: always()
-        run: docker-compose -f docker-compose.yml down
+        run: docker-compose -f docker-compose.yaml down
         
      #docker push to dockerhub
   docker:
@@ -37,7 +37,7 @@ jobs:
       - name: Replacing the jfrog repo password 
         run: |
           echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
-          sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' ./MovieApplication/gradle.propeeties
+          sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' MovieApplication/gradle.propeeties
           
       - name: Docker username 
         run: echo ${{ secrets.DOCKER_USERNAME }}
