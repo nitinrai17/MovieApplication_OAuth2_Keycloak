@@ -8,7 +8,7 @@ COPY --chown=gradle:gradle gradle.properties /home/gradle/
 
 COPY --chown=gradle:gradle src /home/gradle/src
 
-RUN gradle clean test build
+RUN gradle clean build 
 
 
 
