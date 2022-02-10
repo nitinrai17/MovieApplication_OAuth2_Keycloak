@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Replacing the jfrog repo password 
         run: |
-        echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
-        sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' ./MovieApplication/gradle.propeeties
+          echo --- Replacing Jfrog password ${{secrets.JFROG_REPO_PASSWORD}} ---
+          sed 's/put_your_password/${{secrets.JFROG_REPO_PASSWORD}}/g' ./MovieApplication/gradle.propeeties
 
       - name: Build docker-compose stack
         run: |
