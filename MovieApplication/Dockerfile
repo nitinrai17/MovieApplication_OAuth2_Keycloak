@@ -18,6 +18,6 @@ WORKDIR /app
 
 EXPOSE 8880
 
-COPY --from=GRADLE_BUILD /home/gradle/build/libs/MovieApplication-0.0.1-SNAPSHOT.jar /app/MovieApplication.jar
+COPY --from=GRADLE_BUILD /home/gradle/build/libs/*.jar /app/MovieApplication.jar
 
 ENTRYPOINT ["java", "-jar", "MovieApplication.jar"]
